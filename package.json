@@ -1,0 +1,24 @@
+{
+  "name": "redux-example",
+  "version": "0.1.0",
+  "description": "",
+  "main": "example.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node index.js"
+  },
+  "author": "Suraj Keshri <surajkeshri@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "deep-freeze": "0.0.1",
+    "expect": "^22.4.3",
+    "redux": "^3.7.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "mocha": "^5.0.5"
+  }
+}
