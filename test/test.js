@@ -1,4 +1,4 @@
-const todos = require('./todos');
+const todos = require('../src/todos');
 const deepFreeze = require('deep-freeze');
 const expect = require('expect');
 
