@@ -43,22 +43,24 @@ const AddTodo = ({onAddClick}) => {
   );
 };
 
+const Link = ({active, onClick}) => {
+  if (active) return <span>{children}</span>;
+  return (<a href="#" onClick={e => {
+    e.preventDefault();
+    onClick();
+    }}>{children}
+  </a>);
+};
 
 const FilterLink = ({filter, children, currentFilter, onFilterClick}) => {
-
+  
   currentFilter={visibilityFilter} onFilterClick={filter =>
     store.dispatch({
       type: 'SET_VISIBILITY_FILTER',
       filter
     })
   }return (
-    filter !== currentFilter
-    ? <a href="#" onClick={e => {
-      e.preventDefault();
-      onFilterClick(filter);
-      );
-    }}>{children}</a>
-    : <span>{children}</span>
+
   );
 };
 
