@@ -1,6 +1,6 @@
-const Redux = require('Redux');
+const Redux = require('redux');
 
-const todoApp = require('./todos');
+const todoApp = require('../src/todos');
 
 const store = Redux.createStore(todoApp);
 console.log('initial state');

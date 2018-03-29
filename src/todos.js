@@ -1,4 +1,4 @@
-const { combineReducers } = require('Redux');
+const { combineReducers } = require('redux');
 
 const todo = (state, action) => {
   switch (action.type) {

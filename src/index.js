@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-const { createStore } = require('Redux');
+const { createStore } = require('redux');
 
 const todoApp = require('./todos');
 
@@ -43,27 +43,46 @@ const AddTodo = ({onAddClick}) => {
   );
 };
 
-const Link = ({active, onClick}) => {
+const Link = ({active, onClick, children}) => {
   if (active) return <span>{children}</span>;
-  return (<a href="#" onClick={e => {
-    e.preventDefault();
-    onClick();
-    }}>{children}
-  </a>);
+  return (
+    <a
+      href="#"
+      onClick={e => {
+        e.preventDefault();
+        onClick(e);}
+      }
+    >{children}
+    </a>);
 };
 
-const FilterLink = ({filter, children, currentFilter, onFilterClick}) => {
-  
-  currentFilter={visibilityFilter} onFilterClick={filter =>
-    store.dispatch({
-      type: 'SET_VISIBILITY_FILTER',
-      filter
-    })
-  }return (
+class FilterLink extends React.Component {
 
-  );
-};
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() => {
+      this.forceUpdate();
+    });
+  }
 
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  render() {
+    const { filter, children } = this.props;
+    const { visibilityFilter } = store.getState();
+     return (
+       <Link
+         active={filter === visibilityFilter }
+         onClick={() => store.dispatch({
+           type: 'SET_VISIBILITY_FILTER',
+           filter
+         })}
+         >{children}</Link>
+     )
+  }
+
+}
 
 const Footer = () => (
   <div>
