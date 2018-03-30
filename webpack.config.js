@@ -23,6 +23,9 @@ module.exports = {
     compress: true,
     port: 9000
   },
+  resolve: {
+    modules: [path.resolve(__dirname, "src"), "node_modules"]
+  },
   module: {
     rules: [
       {

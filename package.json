@@ -12,10 +12,12 @@
   "author": "Suraj Keshri <surajkeshri@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "lodash": "^4.17.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -34,10 +36,12 @@
     "webpack-dev-server": "^3.1.1"
   },
   "dependenciesComments": {
+    "lodash": "used for throttle function",
     "react": "to use react.createElement",
     "react-dom": "to use reactDOM.render",
     "react-redux": "for provider of store helper to create provider and pass objects are props to child, which children recieve as context",
-    "redux": "for state management"
+    "redux": "for state management",
+    "uuid": "to generate uuid of todo items"
   },
   "devDependenciesComments": {
     "babel-core": "this is the core babel api for transformation of es6 to es5",
