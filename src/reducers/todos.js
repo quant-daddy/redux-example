@@ -75,7 +75,6 @@ const getAllTodos = (state) => state.allId.map(id => state.byId[id]);
 
 export const getVisibleTodos = (state, visibilityFilter) => {
   const allTodos = getAllTodos(state);
-  console.log(allTodos);
   switch (visibilityFilter) {
     case "all":
       return allTodos;
