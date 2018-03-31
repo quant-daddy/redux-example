@@ -4,11 +4,39 @@ const ReactRedux = require('react-redux');
 import { withRouter } from 'react-router'
 const { connect } = ReactRedux;
 import { getVisibleTodos } from 'reducers';
-import { toggleTodo } from 'actions';
+import * as actions from 'actions';
 
-const mapStateToTodoListProps = (state, { match : {params}}) => ({
-    todos: getVisibleTodos(state, params.filter ? params.filter : 'all')
-});
+const mapStateToTodoListProps = (state, { match : {params}}) => {
+  const filter = params.filter ? params.filter : 'all';
+  return {
+    todos: getVisibleTodos(state, filter),
+    filter
+  };
+};
+
+class VisibleTodos extends React.Component {
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.filter !== prevProps.filter) {
+      this.fetchData();
+    }
+  }
+
+  fetchData() {
+    const { filter, fetchTodos } = this.props;
+    fetchTodos(filter)
+  }
+
+  render() {
+    const { toggleTodo, ...rest } = this.props;
+    return <TodoList {...rest} onTodoClick={toggleTodo} />
+  }
+
+}
 
 // const mapDispatchToTodoListProps = (dispatch) => ({
 //     onTodoClick(id) {
@@ -16,10 +44,10 @@ const mapStateToTodoListProps = (state, { match : {params}}) => ({
 //     },
 // });
 // container component for a presentation component requiring props using store.
-const VisibleTodos = withRouter(connect(
+VisibleTodos = withRouter(connect(
   mapStateToTodoListProps,
-  { onTodoClick: toggleTodo },
-)(TodoList));
+  actions,
+)(VisibleTodos));
 
 export default VisibleTodos;
 

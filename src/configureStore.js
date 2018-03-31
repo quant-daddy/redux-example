@@ -1,36 +1,41 @@
-import { loadState, saveState } from './localStorage';
 const { createStore } = require('redux');
-import throttle from 'lodash/throttle';
 import todoApp from 'reducers';
 
-const addLoggingToDispatch = (store) => {
-  const rawDispatch = store.dispatch;
-  if (!console.group) {
-    console.log("group doesn't exist");
-    return rawDispatch;
-  }
-  return (action) => {
-    console.group(action.type);
-    console.log('%c prev state', 'color: gray', store.getState());
-    console.log('%c action', 'color: blue', action);
-    const returnValue = rawDispatch(action);
-    console.log('%c new state', 'color: green', store.getState());
-    console.groupEnd(action.type);
-    return returnValue;
+const wrapDispatchWithMiddlewares = (store, middlewares) => {
+  middlewares.slice().reverse().forEach(mw => {
+    store.dispatch = mw(store)(store.dispatch);
+  })
+}
+
+const promise = (store) => (next) => (action) => {
+  if (typeof action.then === 'function') {
+    return action.then(next);
+  } else {
+    return next(action);
   }
 }
 
-const configureStore = () => {
-  const persistentState = loadState();
-  const store = createStore(todoApp, persistentState);
-  if (process.env.NODE_ENV !== 'production') {
-    store.dispatch = addLoggingToDispatch(store);    
+const logger = (store) => (next) => (action) => {
+  if (!console.group) {
+    console.log("group doesn't exist");
+    return next(action);
   }
-  store.subscribe(throttle(() => {
-    const { todos } = store.getState();
-    saveState({todos});
-  }, 1000));
+  console.group(action.type);
+  console.log('%c prev state', 'color: gray', store.getState());
+  console.log('%c action', 'color: blue', action);
+  const returnValue = next(action);
+  console.log('%c new state', 'color: green', store.getState());
+  console.groupEnd(action.type);
+  return returnValue;
+};
 
+const configureStore = () => {
+  const store = createStore(todoApp);
+  const middlewares = [promise];
+  if (process.env.NODE_ENV !== 'production') {
+    middlewares.push(logger);
+  }
+  wrapDispatchWithMiddlewares(store, middlewares);
   return store;
 };
 
