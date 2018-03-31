@@ -4,7 +4,7 @@ import VisibleTodos from './VisibleTodos';
 import AddTodo from './AddTodo';
 import Footer from './Footer';
 
-const App = ({ match: { params } }) => {
+const App = () => {
   return (
     <div>
       <AddTodo />

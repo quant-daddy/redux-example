@@ -3,39 +3,22 @@ import TodoList from './TodoList';
 const ReactRedux = require('react-redux');
 import { withRouter } from 'react-router'
 const { connect } = ReactRedux;
-
+import { getVisibleTodos } from 'reducers';
 import { toggleTodo } from 'actions';
 
-const getVisibleTodos = (todos, visibilityFilter) =>
-  todos.filter(todo => {
-      switch (visibilityFilter) {
-        case "all":
-        return true;
-        case "pending":
-        return !todo.completed;
-        case "completed":
-        return todo.completed;
-        default:
-        return true;
-      }
-  });
+const mapStateToTodoListProps = (state, { match : {params}}) => ({
+    todos: getVisibleTodos(state, params.filter ? params.filter : 'all')
+});
 
-const mapStateToTodoListProps = (state, { match : {params}}) => {
-  return {
-    todos: getVisibleTodos(state.todos, params.filter)
-  }
-};
-const mapDispatchToTodoListProps = (dispatch) => {
-  return {
-    onTodoClick: (id) => {
-      dispatch(toggleTodo(id));
-    },
-  };
-};
+// const mapDispatchToTodoListProps = (dispatch) => ({
+//     onTodoClick(id) {
+//       dispatch(toggleTodo(id));
+//     },
+// });
 // container component for a presentation component requiring props using store.
 const VisibleTodos = withRouter(connect(
   mapStateToTodoListProps,
-  mapDispatchToTodoListProps
+  { onTodoClick: toggleTodo },
 )(TodoList));
 
 export default VisibleTodos;
