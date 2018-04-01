@@ -1,29 +1,73 @@
 const { combineReducers } = require('redux');
-import todo from './todo';
-
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case 'ADD_TODO':
-    case 'TOGGLE_TODO':
-      return { ...state, [action.id]: todo(state[action.id], action)};
+    case 'RECEIVE_TODOS':
+      let nextState = { ...state };
+      action.response.forEach(todo => {
+        nextState[todo.id] = todo;
+      });
+      return nextState;
     default:
       return state;
   };
 };
 
-const allId = (state=[], action) => {
+// const allId = (state=[], action) => {
+//   switch(action.type) {
+//     case 'ADD_TODO':
+//       return [...state, action.id];
+//     default:
+//       return state;
+//   }
+// };
+
+const allIds = (state = [], action) => {
   switch(action.type) {
-    case 'ADD_TODO':
-      return [...state, action.id];
+    case 'RECEIVE_TODOS':
+      if (action.filter !== 'all') {
+        return state;
+      }
+      return action.response.map(todo => todo.id);
     default:
       return state;
   }
-};
+}
+
+const activeIds = (state = [], action) => {
+  switch (action.type) {
+    case 'RECEIVE_TODOS':
+      if (action.filter !== 'active') {
+        return state;
+      }
+      return action.response.map(todo => todo.id);
+    default:
+      return state;
+  }
+}
+
+const completedIds = (state = [], action) => {
+  switch (action.type) {
+    case 'RECEIVE_TODOS':
+      if (action.filter !== 'completed') {
+        return state;
+      }
+      return [...state, action.response.map(todo => todo.id)];
+    default:
+      return state;
+  }
+}
+
+
+const idsByFilter = combineReducers({
+  all: allIds,
+  pending: activeIds,
+  completed: completedIds
+})
 
 const todos = combineReducers({
   byId,
-  allId
+  idsByFilter
 });
 // const todos = (state = [], action) => {
 //   switch (action.type) {
@@ -73,16 +117,7 @@ export default todos;
 
 const getAllTodos = (state) => state.allId.map(id => state.byId[id]);
 
-export const getVisibleTodos = (state, visibilityFilter) => {
-  const allTodos = getAllTodos(state);
-  switch (visibilityFilter) {
-    case "all":
-      return allTodos;
-    case "pending":
-      return allTodos.filter(todo => !todo.completed);
-    case "completed":
-      return allTodos.filter(todo => todo.completed);
-    default:
-      return new Error(`invalid visibility filter ${visibilityFilter}`);
-  }
+export const getVisibleTodos = (state, filter) => {
+  const ids = state.idsByFilter[filter];
+  return ids.map(id => state.byId[id]);
 };
