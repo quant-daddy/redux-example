@@ -20,6 +20,7 @@
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
@@ -44,6 +45,9 @@
     "react-dom": "to use reactDOM.render",
     "react-redux": "for provider of store helper to create provider and pass objects are props to child, which children recieve as context",
     "redux": "for state management",
+    "redux-logger": "for logging each redux action",
+    "redux-promise": "redux middleware handling promise actions",
+    "redux-thunk": "redux middleware handling thunks",
     "uuid": "to generate uuid of todo items"
   },
   "devDependenciesComments": {

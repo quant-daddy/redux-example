@@ -1,11 +1,29 @@
-import todos, * as fromTodos from './todos';
 const { combineReducers } = require('redux');
+import byId, * as fromById from './byId';
+import createList, * as fromList from './createList';
 
-const todoApp = combineReducers({
-  todos,
+const listByFilter = combineReducers({
+  all: createList('all'),
+  pending: createList('active'),
+  completed: createList('completed')
+})
+
+const todos = combineReducers({
+  byId,
+  listByFilter
 });
-export default todoApp;
 
-const getVisibleTodos = (state, filter) => fromTodos.getVisibleTodos(state.todos, filter);
+export default todos;
 
-export { getVisibleTodos };
+const getAllTodos = (state) => state.allId.map(id => state.byId[id]);
+
+export const getVisibleTodos = (state, filter) => {
+  const ids = fromList.getIds(state.listByFilter[filter]);
+  return ids.map(id => fromById.getTodo(state.byId, id));
+};
+
+export const getIsFetching = (state, filter) =>
+  fromList.getIsFetching(state.listByFilter[filter])
+
+export const getErrorMessage = (state, filter) =>
+  fromList.getErrorMessage(state.listByFilter[filter]);
