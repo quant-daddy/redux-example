@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.5",
+    "normalizr": "^3.2.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
@@ -41,6 +42,7 @@
   },
   "dependenciesComments": {
     "lodash": "used for throttle function",
+    "normalizr": "to normalize action response schema of redux",
     "react": "to use react.createElement",
     "react-dom": "to use reactDOM.render",
     "react-redux": "for provider of store helper to create provider and pass objects are props to child, which children recieve as context",

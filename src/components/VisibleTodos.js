@@ -8,6 +8,7 @@ import * as actions from 'actions';
 import FetchError from './FetchError';
 
 const mapStateToTodoListProps = (state, { match : {params}}) => {
+  console.log('calling mapStateToTodoListProps');
   const filter = params.filter ? params.filter : 'all';
   return {
     todos: getVisibleTodos(state, filter),
@@ -27,6 +28,11 @@ class VisibleTodos extends React.Component {
     if (this.props.filter !== prevProps.filter) {
       this.fetchData();
     }
+  }
+
+  shouldComponentUpdate() {
+    console.log('shouldComponentUpdate called');
+    return true;
   }
 
   fetchData() {

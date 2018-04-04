@@ -4,7 +4,7 @@ import createList, * as fromList from './createList';
 
 const listByFilter = combineReducers({
   all: createList('all'),
-  pending: createList('active'),
+  pending: createList('pending'),
   completed: createList('completed')
 })
 
