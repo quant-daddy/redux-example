@@ -10,7 +10,7 @@ const cleanOptions = {
   exclude: ['index.html']
 };
 // ------------------------------------
-
+const env = process.env.NODE_ENV
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -30,7 +30,21 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
+        exclude: /node_modules/,
         use: ["babel-loader"]
+      },
+      {
+        test:/\.css$/,
+        use: ['style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[local]--[hash:base64:5]',
+              // env === 'development' ? '[local]--[hash:base64:5]': '[hash:base64]'
+            },
+          }
+        ]
       }
       // {
       //   test: /\.html$/,

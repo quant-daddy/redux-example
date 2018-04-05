@@ -1,0 +1,11 @@
+.greenify {
+  font-size: 24px;
+}
+
+.greenify:hover {
+  color: green;
+}
+
+:global .greenify {
+  font-family: 'Arial'
+}
